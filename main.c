@@ -3,16 +3,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define File_argument 2
-#define Circle "circle"
-#define Triangle "triangle"
-#define Polygon "polygon"
+#define FILE_ARGUMENT 2
 
-#define Error_figure_not_found "expected 'circle', 'triangle' or 'polygon'"
-#define Error_open_bracket_not_found "expected '('"
-#define Error_close_bracket_not_found "expected ')'"
-#define Error_wrong_type_argument "expected '<double>'"
-#define Error_unexpected_token "unexpected token"
+#define CIRCLE "circle"
+#define TRIANGLE "triangle"
+#define POLYGON "polygon"
+
+#define ERROR_FIGURE_NOT_FOUND "expected 'circle', 'triangle' or 'polygon'"
+#define ERROR_OPEN_BRACKER_NOT_FOUND "expected '('"
+#define ERROR_CLOSE_BRACKER_NOT_FOUND "expected ')'"
+#define ERROR_WRONG_ARGUMENT "expected '<double>'"
+#define ERROR_UNEXPECTED_TOKEN "unexpected token"
 
 void message_error(char* string, int column, char* message)
 {
@@ -38,15 +39,15 @@ int check_bracket(char* line, int len)
             flag_is_bracket = 1;
         }
         if (attachments < 0) {
-            message_error(line, 0, Error_open_bracket_not_found);
+            message_error(line, 0, ERROR_OPEN_BRACKER_NOT_FOUND);
             return 0;
         }
     }
     if (attachments < 0 || flag_is_bracket == 0) {
-        message_error(line, 0, Error_open_bracket_not_found);
+        message_error(line, 0, ERROR_OPEN_BRACKER_NOT_FOUND);
         return 0;
     } else if (attachments > 0) {
-        message_error(line, len, Error_close_bracket_not_found);
+        message_error(line, len, ERROR_CLOSE_BRACKER_NOT_FOUND);
         return 0;
     }
     return 1;
@@ -81,7 +82,7 @@ int check_unexpected_token(char* line, int len)
         start++;
         if (*start != '\n' && *start != '\0' && *start != ' '
             && *start != ')') {
-            message_error(line, start - line + 1, Error_unexpected_token);
+            message_error(line, start - line + 1, ERROR_UNEXPECTED_TOKEN);
             return 0;
         }
     }
@@ -93,9 +94,9 @@ int is_syntax_correct(char* line, int len)
     if (!check_bracket(line, len)) {
         return 0;
     }
-    if (!(find_figure(line, Circle) || find_figure(line, Triangle)
-          || find_figure(line, Polygon))) {
-        message_error(line, 0, Error_figure_not_found);
+    if (!(find_figure(line, CIRCLE) || find_figure(line, TRIANGLE)
+          || find_figure(line, POLYGON))) {
+        message_error(line, 0, ERROR_FIGURE_NOT_FOUND);
         return 0;
     }
     if (!check_unexpected_token(line, len)) {
@@ -106,7 +107,7 @@ int is_syntax_correct(char* line, int len)
 
 int main(int argc, char** argv)
 {
-    if (argc < File_argument) {
+    if (argc < FILE_ARGUMENT) {
         printf("No file specified\n");
         return -1;
     }
