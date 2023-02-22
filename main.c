@@ -23,7 +23,7 @@
 void message_error(char* string, int column, char* message)
 {
     fprintf(stderr,
-            "%s\n%*c\nError at column %d: %s\n",
+            "%s%*c\nError at column %d: %s\n",
             string,
             column,
             '^',
@@ -97,15 +97,23 @@ int check_unexpected_token(char* line, int len)
 int is_argument_correct(char* line)
 {
     int argumet_count = 0;
+    int dot_count = 0;
     int tokens = 1;
 
     char* curent_symbol = strstr(line, "(");
 
     while (*curent_symbol != '\0' && *curent_symbol != '\n') {
-        if (isdigit(*curent_symbol) || *curent_symbol == '.') {
+        if (isdigit(*curent_symbol)) {
             argumet_count++;
             while (isdigit(*curent_symbol) || *curent_symbol == '.') {
                 curent_symbol++;
+                if (*curent_symbol == '.') {
+                    dot_count++;
+                }
+                if (dot_count > 1) {
+                    message_error(line, curent_symbol - line + 1, ERROR_WRONG_ARGUMENT);
+                    return 0;
+                }
             }
             continue;
         } else if (*curent_symbol == ',') {
@@ -194,6 +202,9 @@ int main(int argc, char** argv)
     }
 
     while ((read = getline(&line, &len, file)) != -1) {
+        if (read == 1) {
+            continue;
+        }
         for (int i = 0; i < len; i++) {
             line[i] = tolower(line[i]);
         }
