@@ -9,11 +9,16 @@
 #define TRIANGLE "triangle"
 #define POLYGON "polygon"
 
+#define CIRCLE_TOKENS_AMOUNT 2
+#define TRIANGLE_TOKENS_AMOUNT 4
+#define POLYGON_TOKENS_AMOUNT 4
+
 #define ERROR_FIGURE_NOT_FOUND "expected 'circle', 'triangle' or 'polygon'"
 #define ERROR_OPEN_BRACKER_NOT_FOUND "expected '('"
 #define ERROR_CLOSE_BRACKER_NOT_FOUND "expected ')'"
 #define ERROR_WRONG_ARGUMENT "expected '<double>'"
 #define ERROR_UNEXPECTED_TOKEN "unexpected token"
+#define ERROR_INVALID_ARGUMENTS_TYPE "invalid arguments"
 
 void message_error(char* string, int column, char* message)
 {
@@ -89,6 +94,69 @@ int check_unexpected_token(char* line, int len)
     return 1;
 }
 
+int is_argument_correct(char* line)
+{
+    int argumet_count = 0;
+    int tokens = 1;
+
+    char* curent_symbol = strstr(line, "(");
+
+    while (*curent_symbol != '\0' && *curent_symbol != '\n') {
+        if (isdigit(*curent_symbol) || *curent_symbol == '.'){
+            argumet_count++;
+            while (isdigit(*curent_symbol) || *curent_symbol == '.') {
+                curent_symbol++;
+            }
+            continue;
+        } else if (*curent_symbol == ',') {
+            if (argumet_count != 2) {
+                message_error(
+                        line,
+                        curent_symbol - line + 1,
+                        ERROR_INVALID_ARGUMENTS_TYPE);
+                return 0;
+            } 
+            argumet_count = 0;
+            tokens++;
+        } else if (*curent_symbol == ')') {
+            if (find_figure(line, CIRCLE)) {
+                if (argumet_count != 1 || (tokens  != CIRCLE_TOKENS_AMOUNT)) {
+                    message_error(
+                            line,
+                            curent_symbol - line + 1,
+                            ERROR_INVALID_ARGUMENTS_TYPE);
+                    return 0;
+                }
+            } else if (find_figure(line, TRIANGLE)) {
+                if (argumet_count != 2 || (tokens != TRIANGLE_TOKENS_AMOUNT)) {
+                    message_error(
+                            line,
+                            curent_symbol - line + 1,
+                            ERROR_INVALID_ARGUMENTS_TYPE);
+                    return 0;
+                }
+            } else if (find_figure(line, POLYGON)) {
+                if (argumet_count != 2 || (tokens < POLYGON_TOKENS_AMOUNT)) {
+                    message_error(
+                            line,
+                            curent_symbol - line + 1,
+                            ERROR_INVALID_ARGUMENTS_TYPE);
+                    return 0;
+                }
+            }
+        } else if (*curent_symbol == ' ' || *curent_symbol == '(') {
+            curent_symbol++;
+            continue;
+        } else {
+            message_error(line, curent_symbol - line + 1, ERROR_WRONG_ARGUMENT);
+            return 0;
+        }
+        curent_symbol++;
+    }
+
+    return 1;
+}
+
 int is_syntax_correct(char* line, int len)
 {
     if (!check_bracket(line, len)) {
@@ -100,6 +168,9 @@ int is_syntax_correct(char* line, int len)
         return 0;
     }
     if (!check_unexpected_token(line, len)) {
+        return 0;
+    }
+    if (!is_argument_correct(line)) {
         return 0;
     }
     return 1;
@@ -129,6 +200,7 @@ int main(int argc, char** argv)
         if (!is_syntax_correct(line, read)) {
             return -1;
         }
+        printf("%s\n", line);
     }
     return 0;
 }
