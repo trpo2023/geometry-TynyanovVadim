@@ -22,13 +22,13 @@
 
 void message_error(char* string, int column, char* message)
 {
-    int len = strlen(string);
-    printf("%s", string);
-    if (string[len - 1] != '\n') {
-        printf("\n");
-    }
-    printf("%*c\n", column, '^');
-    printf("Error at column %d: %s\n", column, message);
+    fprintf(stderr,
+            "%s\n%*c\nError at column %d: %s\n",
+            string,
+            column,
+            '^',
+            column,
+            message);
 }
 
 int check_bracket(char* line, int len)
@@ -102,7 +102,7 @@ int is_argument_correct(char* line)
     char* curent_symbol = strstr(line, "(");
 
     while (*curent_symbol != '\0' && *curent_symbol != '\n') {
-        if (isdigit(*curent_symbol) || *curent_symbol == '.'){
+        if (isdigit(*curent_symbol) || *curent_symbol == '.') {
             argumet_count++;
             while (isdigit(*curent_symbol) || *curent_symbol == '.') {
                 curent_symbol++;
@@ -115,12 +115,12 @@ int is_argument_correct(char* line)
                         curent_symbol - line + 1,
                         ERROR_INVALID_ARGUMENTS_TYPE);
                 return 0;
-            } 
+            }
             argumet_count = 0;
             tokens++;
         } else if (*curent_symbol == ')') {
             if (find_figure(line, CIRCLE)) {
-                if (argumet_count != 1 || (tokens  != CIRCLE_TOKENS_AMOUNT)) {
+                if (argumet_count != 1 || (tokens != CIRCLE_TOKENS_AMOUNT)) {
                     message_error(
                             line,
                             curent_symbol - line + 1,
