@@ -69,7 +69,7 @@ int find_figure(char* line, char* figure)
             continue;
         } else if (j > strlen(figure)) {
             return 0;
-        } else if (line[i] != figure[j]) {
+        } else if (tolower(line[i]) != figure[j]) {
             return 0;
         }
         i++;
@@ -352,6 +352,24 @@ int get_polygon(Polygon* polygon, char* line)
     return 1;
 }
 
+void count_figures(FILE* file, int* circles, int* triangles, int* polygons)
+{
+    char* line = NULL;
+    size_t len = 0;
+    ssize_t read = 0;
+
+    while ((read = getline(&line, &len, file)) != -1) {
+        if (find_figure(line, CIRCLE)) {
+            (*circles)++;
+        } else if (find_figure(line, TRIANGLE)) {
+            (*triangles)++;
+        } else if (find_figure(line, POLYGON)) {
+            (*polygons)++;
+        }
+    }
+    fseek(file, 0, SEEK_SET);
+}
+
 int main(int argc, char** argv)
 {
     if (argc < FILE_ARGUMENT) {
@@ -359,13 +377,29 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    FILE* file = fopen(argv[1], "r");
-    char* line = NULL; // Open file
+    FILE* file = fopen(argv[1], "r"); // Open file
+    char* line = NULL;
     size_t len = 0;
     ssize_t read = 0;
 
-    Circle test_c;
-    Triangle test_t;
+    int circles_size = 0;
+    int triangles_size = 0;
+    int polygons_size = 0;
+
+    int circles_amount = 0;
+    int triangles_amount = 0;
+    // int polygons_amount = 0;
+
+    count_figures(
+        file,
+        &circles_size,
+        &triangles_size,
+        &polygons_size
+    );
+
+    Circle* circles = malloc(sizeof(Circle) * circles_size);
+    Triangle* triangles = malloc(sizeof(Triangle) * triangles_size);
+    // Polygon* polygons = malloc(sizeof(Polygon) * polygons_size);
 
     if (file == NULL) {
         printf("File not found\n");
@@ -376,23 +410,25 @@ int main(int argc, char** argv)
         if (read == 1) {
             continue;
         }
-        for (int i = 0; i < len; i++) {
-            line[i] = tolower(line[i]);
-        }
         if (!is_syntax_correct(line, read)) {
             return -1;
         }
         if (find_figure(line, CIRCLE)) {
-            get_circle(&test_c, line);
-            printf("x:%lf\ny:%lf\nr:%lf\n",
-                   test_c.position.x,
-                   test_c.position.y,
-                   test_c.radius);
+            if (get_circle(&(circles[circles_amount]), line)) {
+                circles_amount++;
+            }
         } else if (find_figure(line, TRIANGLE)) {
-            get_triangle(&test_t, line);
+            if (get_triangle(&(triangles[triangles_amount]), line)) {
+                triangles_amount++;
+            }
         }
         printf("%s\n", line);
     }
+
     free(line);
+    free(circles);
+    free(triangles);
+    // free(polygons);
+
     return 0;
 }
