@@ -27,6 +27,9 @@
 #define ERROR_EXCEPTED_TWO_BRACKETS "expected two brackets"
 #define ERROR_EXCEPTED_ONE_BRACKETS "expected one brackets"
 #define ERROR_FIRST_AND_LAST_NOT_EQUALS "first and last point are not equals"
+#define ERROR_ALLOCATE_MEMORY "failed to allocate memory"
+#define ERROR_FILE_NO_SPECIFIED "No file specified"
+#define ERROR_FILE_NOT_FOUND "File not found"
 
 typedef struct {
     double x;
@@ -277,6 +280,26 @@ int is_syntax_correct(char* line, int len)
     return 1;
 }
 
+void count_polygon_tokens(char* line, Polygon* polygon)
+{
+    int tokens = 0;
+
+    char* curent_symbol = NULL;
+    for (int i = 0; line[i] != '\0'; i++) {
+        if (line[i] == '(') {
+            curent_symbol = &(line[i]);
+        }
+    }
+    while (*curent_symbol != ')') {
+        if (*curent_symbol == ',') {
+            tokens++;
+        }
+        curent_symbol++;
+    }
+    tokens++;
+    polygon->size = tokens;
+}
+
 int get_circle(Circle* circle, char* line)
 {
     char* symbol = NULL;
@@ -323,6 +346,13 @@ int get_triangle(Triangle* triangle, char* line)
 
 int get_polygon(Polygon* polygon, char* line)
 {
+    count_polygon_tokens(line, polygon);
+    Point* cords = malloc(polygon->size * sizeof(Point));
+    if (!cords) {
+        fprintf(stderr, "%s\n", ERROR_ALLOCATE_MEMORY);
+        return 0;
+    }
+    polygon->cords = cords;
     int i = 0;
     char* symbol = NULL;
     char* next = NULL;
@@ -373,7 +403,7 @@ void count_figures(FILE* file, int* circles, int* triangles, int* polygons)
 int main(int argc, char** argv)
 {
     if (argc < FILE_ARGUMENT) {
-        printf("No file specified\n");
+        fprintf(stderr, "%s\n", ERROR_FILE_NO_SPECIFIED);
         return -1;
     }
 
@@ -388,7 +418,7 @@ int main(int argc, char** argv)
 
     int circles_amount = 0;
     int triangles_amount = 0;
-    // int polygons_amount = 0;
+    int polygons_amount = 0;
 
     count_figures(
         file,
@@ -399,10 +429,23 @@ int main(int argc, char** argv)
 
     Circle* circles = malloc(sizeof(Circle) * circles_size);
     Triangle* triangles = malloc(sizeof(Triangle) * triangles_size);
-    // Polygon* polygons = malloc(sizeof(Polygon) * polygons_size);
+    Polygon* polygons = malloc(sizeof(Polygon) * polygons_size);
+
+    if (!circles && circles_size > 0) {
+        fprintf(stderr, "%s\n", ERROR_ALLOCATE_MEMORY);
+        return -1;
+    }
+    if (!triangles && triangles_size > 0) {
+        fprintf(stderr, "%s\n", ERROR_ALLOCATE_MEMORY);
+        return -1;
+    }
+    if (!polygons && polygons_size > 0) {
+        fprintf(stderr, "%s\n", ERROR_ALLOCATE_MEMORY);
+        return -1;
+    }
 
     if (file == NULL) {
-        printf("File not found\n");
+        fprintf(stderr, "%s\n", ERROR_FILE_NOT_FOUND);
         return -1;
     }
 
@@ -421,6 +464,10 @@ int main(int argc, char** argv)
             if (get_triangle(&(triangles[triangles_amount]), line)) {
                 triangles_amount++;
             }
+        } else if (find_figure(line, POLYGON)) {
+            if (get_polygon(&(polygons[polygons_amount]), line)) {
+                polygons_amount++;
+            }
         }
         printf("%s\n", line);
     }
@@ -428,7 +475,11 @@ int main(int argc, char** argv)
     free(line);
     free(circles);
     free(triangles);
-    // free(polygons);
+
+    for (int i = 0; i < polygons_amount; i++) {
+        free(polygons[i].cords);
+    }
+    free(polygons);
 
     return 0;
 }
