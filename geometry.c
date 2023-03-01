@@ -50,7 +50,6 @@ typedef struct {
     int size;
 } Polygon;
 
-
 void message_error(char* string, int column, char* message)
 {
     fprintf(stderr,
@@ -96,7 +95,7 @@ int check_brackets(char* line, int len)
             brackets++;
         }
         if (attachments < 0) {
-            message_error(line, 0, ERROR_OPEN_BRACKER_NOT_FOUND);
+            message_error(line, (strstr(line, "(") - line) + 1, ERROR_OPEN_BRACKER_NOT_FOUND);
             return 0;
         }
     }
@@ -452,6 +451,9 @@ int main(int argc, char** argv)
     while ((read = getline(&line, &len, file)) != -1) {
         if (read == 1) {
             continue;
+        }
+        for (int i = 0; i < len; i++) {
+            line[i] = tolower(line[i]);
         }
         if (!is_syntax_correct(line, read)) {
             return -1;
