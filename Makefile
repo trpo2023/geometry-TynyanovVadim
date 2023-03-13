@@ -1,12 +1,12 @@
 APP_NAME = geometry
 LIB_NAME = libgeometry
 
-CFLAGS = -Wall -Werror -Wextra
-CPPFLAGS = -MMD -I src -MP
+CFLAGS = -Wall -Wextra -Werror
+CPPFLAGS = -I src -MP -MMD
 
 BIN_DIR = bin
-SRC_DIR = src
 OBJ_DIR = obj
+SRC_DIR = src
 
 APP_PATH = $(BIN_DIR)/$(APP_NAME)
 LIB_PATH = $(OBJ_DIR)/$(SRC_DIR)/$(LIB_NAME)/$(LIB_NAME).a
