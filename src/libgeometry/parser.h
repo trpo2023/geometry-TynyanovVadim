@@ -15,7 +15,7 @@ typedef struct {
 } Circle;
 
 typedef struct {
-    Point cords[4];
+    Point* cords;
 } Triangle;
 
 typedef struct {
@@ -28,3 +28,7 @@ int get_circle(Circle* circle, char* line);
 int get_triangle(Triangle* triangle, char* line);
 int get_polygon(Polygon* polygon, char* line);
 void count_figures(FILE* file, int* circles, int* triangles, int* polygons);
+double circle_surface(Circle* circle);
+double gauss_surface(Point* cords, size_t len);
+double triangel_surface(const Triangle triangle);
+double polygon_surface(const Polygon polygon);

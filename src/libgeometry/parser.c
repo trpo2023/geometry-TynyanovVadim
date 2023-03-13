@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #include "lexer.h"
 #include "parser.h"
@@ -46,6 +47,8 @@ int get_triangle(Triangle* triangle, char* line)
     int i = 0;
     char* symbol = NULL;
     char* next = NULL;
+    Point* cords = malloc(sizeof(Point) * TRIANGLE_TOKENS_AMOUNT);
+    triangle->cords = cords;
     for (int i = 1; line[i] != '\0'; i++) {
         if (line[i - 1] == '(') {
             symbol = &(line[i]);
@@ -124,4 +127,32 @@ void count_figures(FILE* file, int* circles, int* triangles, int* polygons)
         }
     }
     fseek(file, 0, SEEK_SET);
+}
+
+double circle_surface(Circle* circle)
+{
+    return M_PI * pow(circle->radius, 2);
+}
+
+double gauss_surface(Point* cords, size_t len)
+{
+    double surface = 0;
+    for (size_t i = 0; i < len; i++) {
+        surface += cords[i].x * cords[(i + 1) % len].y;
+    }
+
+    for (size_t i = 0; i < len; i++) {
+        surface -= cords[i].x * cords[(i - 1) % len].y;
+    }
+    return fabs(surface) / 2.0;
+}
+
+double triangel_surface(const Triangle triangle)
+{
+    return gauss_surface(triangle.cords, 3);
+}
+
+double polygon_surface(const Polygon polygon)
+{
+    return gauss_surface(polygon.cords, polygon.size - 1);
 }
