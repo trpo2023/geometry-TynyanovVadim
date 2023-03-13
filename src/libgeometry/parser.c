@@ -1,10 +1,10 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-#include "parser.h"
 #include "lexer.h"
+#include "parser.h"
 
 void count_polygon_tokens(char* line, Polygon* polygon)
 {

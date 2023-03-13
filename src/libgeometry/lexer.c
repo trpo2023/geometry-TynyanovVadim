@@ -1,7 +1,7 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "lexer.h"
 #include "parser.h"
@@ -51,7 +51,10 @@ int check_brackets(char* line, int len)
             brackets++;
         }
         if (attachments < 0) {
-            message_error(line, (strstr(line, "(") - line) + 1, ERROR_OPEN_BRACKER_NOT_FOUND);
+            message_error(
+                    line,
+                    (strstr(line, "(") - line) + 1,
+                    ERROR_OPEN_BRACKER_NOT_FOUND);
             return 0;
         }
     }
