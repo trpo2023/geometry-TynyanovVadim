@@ -28,12 +28,7 @@ int main(int argc, char** argv)
     int triangles_amount = 0;
     int polygons_amount = 0;
 
-    count_figures(
-        file,
-        &circles_size,
-        &triangles_size,
-        &polygons_size
-    );
+    count_figures(file, &circles_size, &triangles_size, &polygons_size);
 
     Circle* circles = malloc(sizeof(Circle) * circles_size);
     Triangle* triangles = malloc(sizeof(Triangle) * triangles_size);
