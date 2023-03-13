@@ -1,4 +1,10 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
 #include "lexer.h"
+#include "parser.h"
 
 void message_error(char* string, int column, char* message)
 {
@@ -13,7 +19,7 @@ void message_error(char* string, int column, char* message)
 
 int find_figure(char* line, char* figure)
 {
-    int i, j;
+    size_t i, j;
     i = j = 0;
     while ((line[i] != '(') && (line[i] != '\n') && (line[i] != '\0')) {
         if (j == 0 && isspace(line[i])) {

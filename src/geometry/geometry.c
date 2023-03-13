@@ -61,7 +61,7 @@ int main(int argc, char** argv)
         if (read == 1) {
             continue;
         }
-        for (int i = 0; i < len; i++) {
+        for (size_t i = 0; i < len; i++) {
             line[i] = tolower(line[i]);
         }
         if (!is_syntax_correct(line, read)) {

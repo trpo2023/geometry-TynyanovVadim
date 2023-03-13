@@ -1,4 +1,4 @@
-#include guard
+#pragma once
 
 #define CIRCLE "circle"
 #define TRIANGLE "triangle"

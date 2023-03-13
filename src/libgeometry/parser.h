@@ -1,3 +1,5 @@
+#pragma once
+
 #define ERROR_ALLOCATE_MEMORY "failed to allocate memory"
 #define ERROR_FILE_NO_SPECIFIED "No file specified"
 #define ERROR_FILE_NOT_FOUND "File not found"
