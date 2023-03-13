@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-// #include "libgeometry/lexer.h"
-// #include "libgeometry/parser.h"
+#include "libgeometry/lexer.h"
+#include "libgeometry/parser.h"
 
 #define FILE_ARGUMENT 2
 
