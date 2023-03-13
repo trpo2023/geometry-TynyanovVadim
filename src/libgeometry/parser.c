@@ -26,8 +26,7 @@ void count_polygon_tokens(char* line, Polygon* polygon)
     polygon->size = tokens;
 }
 
-int get_circle(Circle* circle, char* line)
-{
+int get_circle(Circle* circle, char* line){
     char* symbol = NULL;
     for (int i = 0; line[i] != '\0'; i++) {
         if (line[i] == '(') {
