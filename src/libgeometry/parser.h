@@ -32,3 +32,4 @@ double circle_surface(Circle* circle);
 double gauss_surface(Point* cords, size_t len);
 double triangel_surface(const Triangle triangle);
 double polygon_surface(const Polygon polygon);
+double circle_perimetr(const Circle circle);

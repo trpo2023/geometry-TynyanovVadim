@@ -1,8 +1,8 @@
 #include <ctype.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
 
 #include "lexer.h"
 #include "parser.h"
@@ -129,12 +129,12 @@ void count_figures(FILE* file, int* circles, int* triangles, int* polygons)
     fseek(file, 0, SEEK_SET);
 }
 
-double circle_surface(Circle* circle)
+double circle_surface(const Circle circle)
 {
-    return M_PI * pow(circle->radius, 2);
+    return M_PI * pow(circle.radius, 2);
 }
 
-double gauss_surface(Point* cords, size_t len)
+double gauss_surface(const Point* cords, size_t len)
 {
     double surface = 0;
     for (size_t i = 0; i < len; i++) {
@@ -155,4 +155,9 @@ double triangel_surface(const Triangle triangle)
 double polygon_surface(const Polygon polygon)
 {
     return gauss_surface(polygon.cords, polygon.size - 1);
+}
+
+double circle_perimetr(const Circle circle)
+{
+    return 2 * M_PI * circle.radius;
 }
