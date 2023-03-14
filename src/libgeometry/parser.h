@@ -33,3 +33,7 @@ double gauss_surface(const Point* cords, size_t len);
 double triangel_surface(const Triangle triangle);
 double polygon_surface(const Polygon polygon);
 double circle_perimetr(const Circle circle);
+double two_points_distant(const Point point1, const Point point2);
+double figure_perimetr(const Point* cords, size_t len);
+double triangle_perimetr(const Triangle triangle);
+double polygon_perimetr(const Polygon polygon);

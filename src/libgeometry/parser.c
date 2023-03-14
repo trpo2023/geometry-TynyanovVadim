@@ -161,3 +161,27 @@ double circle_perimetr(const Circle circle)
 {
     return 2 * M_PI * circle.radius;
 }
+
+double two_points_distant(const Point point1, const Point point2)
+{
+    return sqrt(pow(point1.x - point2.x, 2) + pow(point1.y - point2.y, 2))
+}
+
+double figure_perimetr(const Point* cords, size_t len)
+{
+    double perimetr = 0;
+    for (size_t i = 0; i < len - 1; i++) {
+        perimetr += two_points_distant(cords[i], cords[i + 1]);
+    }
+    return perimetr;
+}
+
+double triangle_perimetr(const Triangle triangle)
+{
+    return figure_perimetr(triangle.cords, TRIANGLE_TOKENS_AMOUNT);
+}
+
+double polygon_perimetr(const Polygon polygon)
+{
+    return figure_perimetr(polygon.cords, polygon.size);
+}
