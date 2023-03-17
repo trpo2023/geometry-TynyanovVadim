@@ -65,20 +65,26 @@ int main(int argc, char** argv)
         printf("%s", line);
         if (find_figure(line, CIRCLE)) {
             if (get_circle(&(circles[circles_amount]), line)) {
-                printf("\tPerimetr = %f\n", circle_perimetr(circles[circles_amount]));
-                printf("\tSurface = %f\n", circle_surface(circles[circles_amount]));
+                printf("\tPerimetr = %f\n",
+                       circle_perimetr(circles[circles_amount]));
+                printf("\tSurface = %f\n",
+                       circle_surface(circles[circles_amount]));
                 circles_amount++;
             }
         } else if (find_figure(line, TRIANGLE)) {
             if (get_triangle(&(triangles[triangles_amount]), line)) {
-                printf("\tPerimetr = %f\n", triangle_perimetr(triangles[triangles_amount]));
-                printf("\tSurface = %f\n", triangel_surface(triangles[triangles_amount]));
+                printf("\tPerimetr = %f\n",
+                       triangle_perimetr(triangles[triangles_amount]));
+                printf("\tSurface = %f\n",
+                       triangel_surface(triangles[triangles_amount]));
                 triangles_amount++;
             }
         } else if (find_figure(line, POLYGON)) {
             if (get_polygon(&(polygons[polygons_amount]), line)) {
-                printf("\tPerimetr = %f\n", polygon_perimetr(polygons[polygons_amount]));
-                printf("\tSurface = %f\n", polygon_surface(polygons[polygons_amount]));
+                printf("\tPerimetr = %f\n",
+                       polygon_perimetr(polygons[polygons_amount]));
+                printf("\tSurface = %f\n",
+                       polygon_surface(polygons[polygons_amount]));
                 polygons_amount++;
             }
         }
