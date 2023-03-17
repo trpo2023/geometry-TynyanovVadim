@@ -131,7 +131,7 @@ void count_figures(FILE* file, int* circles, int* triangles, int* polygons)
 
 double circle_surface(const Circle circle)
 {
-    return M_PI * pow(circle.radius, 2);
+    return M_PI * pow(circle.radius, 2);//M_PI = 3.14
 }
 
 double gauss_surface(const Point* cords, size_t len)
@@ -159,7 +159,7 @@ double polygon_surface(const Polygon polygon)
 
 double circle_perimetr(const Circle circle)
 {
-    return 2 * M_PI * circle.radius;
+    return 2 * M_PI * circle.radius; //M_PI = 3.14
 }
 
 double two_points_distant(const Point point1, const Point point2)
