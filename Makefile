@@ -8,7 +8,9 @@ LDLIBS = -lm
 BIN_DIR = bin
 SRC_DIR = src
 OBJ_DIR = obj
+DATA_NAME = data
 
+DATA_PATH = $(BIN_DIR)/$(DATA_NAME)
 APP_PATH = $(BIN_DIR)/$(APP_NAME)
 LIB_PATH = $(OBJ_DIR)/$(SRC_DIR)/$(LIB_NAME)/$(LIB_NAME).a
 
@@ -41,3 +43,7 @@ clean:
 	$(RM) $(APP_PATH) $(LIB_PATH)
 	find $(OBJ_DIR) -name '*.o' -exec $(RM) '{}' \;
 	find $(OBJ_DIR) -name '*.d' -exec $(RM) '{}' \;
+
+.PHONY: run
+run: $(APP_PATH)
+	./$(APP_PATH) $(DATA_PATH);
