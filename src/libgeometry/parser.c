@@ -162,7 +162,7 @@ double circle_perimetr(const Circle circle)
     return 2 * M_PI * circle.radius; // M_PI = 3.14
 }
 
-double two_points_distant(const Point point1, const Point point2)
+double two_points_distance(const Point point1, const Point point2)
 {
     return sqrt(pow(point1.x - point2.x, 2) + pow(point1.y - point2.y, 2));
 }
@@ -171,7 +171,7 @@ double figure_perimetr(const Point* cords, size_t len)
 {
     double perimetr = 0;
     for (size_t i = 0; i < len - 1; i++) {
-        perimetr += two_points_distant(cords[i], cords[i + 1]);
+        perimetr += two_points_distance(cords[i], cords[i + 1]);
     }
     return perimetr;
 }
@@ -186,31 +186,35 @@ double polygon_perimetr(const Polygon polygon)
     return figure_perimetr(polygon.cords, polygon.size);
 }
 
-int is_segment_collision(const Point *segment_1, const Point *segment_2)
+int is_segment_collision(const Point* segment_1, const Point* segment_2)
 
 {
     double v1, v2, v3, v4;
-    Point vector_12 = {segment_1[1].x - segment_1[0].x, (segment_1[1].y - segment_1[0].y)};
-    Point vector_34 = {segment_2[1].x - segment_2[0].x, (segment_2[1].y - segment_2[0].y)};
+    Point vector_12 = {
+            segment_1[1].x - segment_1[0].x, (segment_1[1].y - segment_1[0].y)};
+    Point vector_34 = {
+            segment_2[1].x - segment_2[0].x, (segment_2[1].y - segment_2[0].y)};
 
-    if (
-    (segment_1[0].x == segment_2[0].x && segment_1[0].y == segment_2[0].y) || 
-    (segment_1[0].x == segment_2[1].x && segment_1[0].y == segment_2[1].y) || 
-    (segment_1[1].x == segment_2[0].x && segment_1[1].y == segment_2[0].y) || 
-    (segment_1[1].x == segment_2[1].x && segment_1[1].y == segment_2[1].y)) {
+    if ((segment_1[0].x == segment_2[0].x && segment_1[0].y == segment_2[0].y)
+        || (segment_1[0].x == segment_2[1].x
+            && segment_1[0].y == segment_2[1].y)
+        || (segment_1[1].x == segment_2[0].x
+            && segment_1[1].y == segment_2[0].y)
+        || (segment_1[1].x == segment_2[1].x
+            && segment_1[1].y == segment_2[1].y)) {
         return 1;
-       }
+    }
 
-    v1 = vector_12.x * (segment_2[0].y - segment_1[0].y) - //12-13
-         vector_12.y * (segment_2[0].x - segment_1[0].x);
-    v2 = vector_12.x * (segment_2[1].y - segment_1[0].y) - //12-14
-         vector_12.y * (segment_2[1].x - segment_1[0].x);
-    v3 = vector_34.x * (segment_1[0].y - segment_2[0].y) - //34-31
-         vector_34.y * (segment_1[0].x - segment_2[0].x);
-    v4 = vector_34.x * (segment_1[1].y - segment_2[1].y) - //34-32
-         vector_34.y * (segment_1[1].x - segment_2[1].x);
+    v1 = vector_12.x * (segment_2[0].y - segment_1[0].y) - // 12-13
+            vector_12.y * (segment_2[0].x - segment_1[0].x);
+    v2 = vector_12.x * (segment_2[1].y - segment_1[0].y) - // 12-14
+            vector_12.y * (segment_2[1].x - segment_1[0].x);
+    v3 = vector_34.x * (segment_1[0].y - segment_2[0].y) - // 34-31
+            vector_34.y * (segment_1[0].x - segment_2[0].x);
+    v4 = vector_34.x * (segment_1[1].y - segment_2[1].y) - // 34-32
+            vector_34.y * (segment_1[1].x - segment_2[1].x);
 
-    return ((v1 * v2  < 0) && (v3 * v4 < 0));
+    return ((v1 * v2 < 0) && (v3 * v4 < 0));
 }
 
 double vector_len(const Point vector)
@@ -220,25 +224,23 @@ double vector_len(const Point vector)
 
 double find_cos(const Point vector_1, const Point vector_2)
 {
-    return (
-        vector_1.x * vector_2.x +
-        vector_1.y * vector_2.y) /
-        (vector_len(vector_1) + vector_len(vector_2));
+    return (vector_1.x * vector_2.x + vector_1.y * vector_2.y)
+            / (vector_len(vector_1) + vector_len(vector_2));
 }
 
 double find_height_of_triangle(const Point a, const Point b, const Point c)
 {
     // a, b - segment`s cords, c - point`s cords
-    double ab = two_points_distant(a, b);
-    double ac = two_points_distant(a, c);
-    double bc = two_points_distant(b, c);
+    double ab = two_points_distance(a, b);
+    double ac = two_points_distance(a, c);
+    double bc = two_points_distance(b, c);
     double p = (ab + ac + bc) / 2.0;
 
     double height = 2.0 * sqrt(p * (p - ab) * (p - ac) * (p - bc)) / ab;
     return height;
 }
 
-double point_segment_distant(const Point a, const Point b, const Point c)
+double point_segment_distance(const Point a, const Point b, const Point c)
 {
     // a, b - segment`s cords, c - point`s cords
     Point vector_ba = {a.x - b.x, a.y - b.y};
@@ -250,10 +252,40 @@ double point_segment_distant(const Point a, const Point b, const Point c)
     double bac_cos = find_cos(vector_ab, vector_ac);
 
     if (bac_cos <= 0) {
-        return two_points_distant(a, c);
+        return two_points_distance(a, c);
     } else if (abc_cos <= 0) {
-        return two_points_distant(b, c);
+        return two_points_distance(b, c);
     } else {
         return find_height_of_triangle(a, b, c);
     }
+}
+
+int is_collision_figure_with_circle(const Circle* circle, const Point* cords, size_t size)
+{
+    for (size_t i = 1; i < size; i++) {
+        double distance = point_segment_distance(
+                cords[i - 1],
+                cords[i],
+                circle->position);
+        if (distance <= circle->radius) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int is_collision_triangle_circle(const Circle* circle, const Triangle* triangle)
+{
+    return is_collision_figure_with_circle(
+            circle, triangle->cords,
+            TRIANGLE_TOKENS_AMOUNT
+            );
+}
+
+int is_collision_polygon_circle(const Circle* circle, const Polygon* polygon)
+{
+    return is_collision_figure_with_circle(
+            circle, polygon->cords,
+            polygon->size
+            );
 }
