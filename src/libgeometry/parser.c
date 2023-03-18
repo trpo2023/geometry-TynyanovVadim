@@ -192,10 +192,11 @@ int is_segment_collision(const Point *segment_1, const Point *segment_2)
     Point vector_12 = {segment_1[1].x - segment_1[0].x, (segment_1[1].y - segment_1[0].y)};
     Point vector_34 = {segment_2[1].x - segment_2[0].x, (segment_2[1].y - segment_2[0].y)};
 
-    if ((segment_1[0].x == segment_2[0].x && segment_1[0].y == segment_2[0].y) || 
-       (segment_1[0].x == segment_2[1].x && segment_1[0].y == segment_2[1].y) || 
-       (segment_1[1].x == segment_2[0].x && segment_1[1].y == segment_2[0].y) || 
-       (segment_1[1].x == segment_2[1].x && segment_1[1].y == segment_2[1].y)) {
+    if (
+    (segment_1[0].x == segment_2[0].x && segment_1[0].y == segment_2[0].y) || 
+    (segment_1[0].x == segment_2[1].x && segment_1[0].y == segment_2[1].y) || 
+    (segment_1[1].x == segment_2[0].x && segment_1[1].y == segment_2[0].y) || 
+    (segment_1[1].x == segment_2[1].x && segment_1[1].y == segment_2[1].y)) {
         return 1;
        }
 
