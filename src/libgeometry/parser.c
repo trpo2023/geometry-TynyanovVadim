@@ -225,3 +225,35 @@ double find_cos(const Point vector_1, const Point vector_2)
         vector_1.y * vector_2.y) /
         (vector_len(vector_1) + vector_len(vector_2));
 }
+
+double find_height_of_triangle(const Point a, const Point b, const Point c)
+{
+    // a, b - segment`s cords, c - point`s cords
+    double ab = two_points_distant(a, b);
+    double ac = two_points_distant(a, c);
+    double bc = two_points_distant(b, c);
+    double p = (ab + ac + bc) / 2.0;
+
+    double height = 2.0 * sqrt(p * (p - ab) * (p - ac) * (p - bc)) / ab;
+    return height;
+}
+
+double point_segment_distant(const Point a, const Point b, const Point c)
+{
+    // a, b - segment`s cords, c - point`s cords
+    Point vector_ba = {a.x - b.x, a.y - b.y};
+    Point vector_ab = {b.x - a.x, b.y - a.y};
+    Point vector_bc = {c.x - b.x, c.y - b.y};
+    Point vector_ac = {c.x - a.x, c.y - a.y};
+
+    double abc_cos = find_cos(vector_ba, vector_bc);
+    double bac_cos = find_cos(vector_ab, vector_ac);
+
+    if (bac_cos <= 0) {
+        return two_points_distant(a, c);
+    } else if (abc_cos <= 0) {
+        return two_points_distant(b, c);
+    } else {
+        return find_height_of_triangle(a, b, c);
+    }
+}

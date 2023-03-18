@@ -40,3 +40,5 @@ double polygon_perimetr(const Polygon polygon);
 int is_segment_collision(const Point *segment_1, const Point *segment_2);
 double vector_len(const Point vector);
 double find_cos(const Point vector_1, const Point vector_2);
+double find_height_of_triangle(const Point a, const Point b, const Point c);
+double point_segment_distant(const Point a, const Point b, const Point c);
