@@ -45,3 +45,6 @@ double point_segment_distance(const Point a, const Point b, const Point c);
 int is_collision_figure_with_circle(const Circle* circle, const Point* cords, size_t size);
 int is_collision_triangle_circle(const Circle* circle, const Triangle* triangle);
 int is_collision_polygon_circle(const Circle* circle, const Polygon* polygon);
+int is_collision_figures(
+    const Point* cords1, const size_t size1,
+    const Point* cords2, const size_t size2);

@@ -273,3 +273,19 @@ int is_collision_figure_with_circle(const Circle* circle, const Point* cords, si
     }
     return 0;
 }
+
+int is_collision_figures(
+    const Point* cords1, const size_t size1,
+    const Point* cords2, const size_t size2)
+{
+    for(size_t i = 0; i < size1 - 1; i++) {
+        for (size_t j = 0; j < size2 - 1; j++) {
+            Point segment1[2] = {cords1[i], cords1[i + 1]};
+            Point segment2[2] = {cords2[j], cords2[j + 1]};
+            if (is_segment_collision(segment1, segment2)) {
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
