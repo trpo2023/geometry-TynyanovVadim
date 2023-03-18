@@ -273,19 +273,3 @@ int is_collision_figure_with_circle(const Circle* circle, const Point* cords, si
     }
     return 0;
 }
-
-int is_collision_triangle_circle(const Circle* circle, const Triangle* triangle)
-{
-    return is_collision_figure_with_circle(
-            circle, triangle->cords,
-            TRIANGLE_TOKENS_AMOUNT
-            );
-}
-
-int is_collision_polygon_circle(const Circle* circle, const Polygon* polygon)
-{
-    return is_collision_figure_with_circle(
-            circle, polygon->cords,
-            polygon->size
-            );
-}
