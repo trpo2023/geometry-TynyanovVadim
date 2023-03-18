@@ -185,3 +185,28 @@ double polygon_perimetr(const Polygon polygon)
 {
     return figure_perimetr(polygon.cords, polygon.size);
 }
+
+int is_segment_collision(const Point *segment_1, const Point *segment_2)
+{
+    double v1, v2, v3, v4;
+    Point vector_12 = {segment_1[1].x - segment_1[0].x, (segment_1[1].y - segment_1[0].y)};
+    Point vector_34 = {segment_2[1].x - segment_2[0].x, (segment_2[1].y - segment_2[0].y)};
+
+    if ((segment_1[0].x == segment_2[0].x && segment_1[0].y == segment_2[0].y) || 
+       (segment_1[0].x == segment_2[1].x && segment_1[0].y == segment_2[1].y) || 
+       (segment_1[1].x == segment_2[0].x && segment_1[1].y == segment_2[0].y) || 
+       (segment_1[1].x == segment_2[1].x && segment_1[1].y == segment_2[1].y)) {
+        return 1;
+       }
+
+    v1 = vector_12.x * (segment_2[0].y - segment_1[0].y) - //12-13
+         vector_12.y * (segment_2[0].x - segment_1[0].x);
+    v2 = vector_12.x * (segment_2[1].y - segment_1[0].y) - //12-14
+         vector_12.y * (segment_2[1].x - segment_1[0].x);
+    v3 = vector_34.x * (segment_1[0].y - segment_2[0].y) - //34-31
+         vector_34.y * (segment_1[0].x - segment_2[0].x);
+    v4 = vector_34.x * (segment_1[1].y - segment_2[1].y) - //34-32
+         vector_34.y * (segment_1[1].x - segment_2[1].x);
+
+    return ((v1 * v2  < 0) && (v3 * v4 < 0));
+}

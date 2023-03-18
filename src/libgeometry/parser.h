@@ -37,3 +37,4 @@ double two_points_distant(const Point point1, const Point point2);
 double figure_perimetr(const Point* cords, size_t len);
 double triangle_perimetr(const Triangle triangle);
 double polygon_perimetr(const Polygon polygon);
+int is_segment_collision(const Point *segment_1, const Point *segment_2);
