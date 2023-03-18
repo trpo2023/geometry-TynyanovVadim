@@ -38,3 +38,5 @@ double figure_perimetr(const Point* cords, size_t len);
 double triangle_perimetr(const Triangle triangle);
 double polygon_perimetr(const Polygon polygon);
 int is_segment_collision(const Point *segment_1, const Point *segment_2);
+double vector_len(const Point vector);
+double find_cos(const Point vector_1, const Point vector_2);

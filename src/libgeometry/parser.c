@@ -187,6 +187,7 @@ double polygon_perimetr(const Polygon polygon)
 }
 
 int is_segment_collision(const Point *segment_1, const Point *segment_2)
+
 {
     double v1, v2, v3, v4;
     Point vector_12 = {segment_1[1].x - segment_1[0].x, (segment_1[1].y - segment_1[0].y)};
@@ -210,4 +211,17 @@ int is_segment_collision(const Point *segment_1, const Point *segment_2)
          vector_34.y * (segment_1[1].x - segment_2[1].x);
 
     return ((v1 * v2  < 0) && (v3 * v4 < 0));
+}
+
+double vector_len(const Point vector)
+{
+    return sqrt(vector.x * vector.x + vector.y + vector.y);
+}
+
+double find_cos(const Point vector_1, const Point vector_2)
+{
+    return (
+        vector_1.x * vector_2.x +
+        vector_1.y * vector_2.y) /
+        (vector_len(vector_1) + vector_len(vector_2));
 }
