@@ -30,7 +30,7 @@ int get_polygon(Polygon* polygon, char* line);
 void count_figures(FILE* file, int* circles, int* triangles, int* polygons);
 double circle_surface(const Circle circle);
 double gauss_surface(const Point* cords, size_t len);
-double triangel_surface(const Triangle triangle);
+double triangle_surface(const Triangle triangle);
 double polygon_surface(const Polygon polygon);
 double circle_perimetr(const Circle circle);
 double two_points_distance(const Point point1, const Point point2);
@@ -42,9 +42,8 @@ double vector_len(const Point vector);
 double find_cos(const Point vector_1, const Point vector_2);
 double find_height_of_triangle(const Point a, const Point b, const Point c);
 double point_segment_distance(const Point a, const Point b, const Point c);
-int is_collision_figure_with_circle(const Circle* circle, const Point* cords, size_t size);
-int is_collision_triangle_circle(const Circle* circle, const Triangle* triangle);
-int is_collision_polygon_circle(const Circle* circle, const Polygon* polygon);
+int is_collision_figure_with_circle(const Circle circle, const Point* cords, size_t size);
+int is_collision_circles(const Circle circle1, const Circle circle2);
 int is_collision_figures(
     const Point* cords1, const size_t size1,
     const Point* cords2, const size_t size2);

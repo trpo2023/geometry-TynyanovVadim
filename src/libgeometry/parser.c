@@ -147,9 +147,9 @@ double gauss_surface(const Point* cords, size_t len)
     return fabs(surface) / 2.0;
 }
 
-double triangel_surface(const Triangle triangle)
+double triangle_surface(const Triangle triangle)
 {
-    return gauss_surface(triangle.cords, 3);
+    return gauss_surface(triangle.cords, TRIANGLE_TOKENS_AMOUNT);
 }
 
 double polygon_surface(const Polygon polygon)
@@ -260,25 +260,33 @@ double point_segment_distance(const Point a, const Point b, const Point c)
     }
 }
 
-int is_collision_figure_with_circle(const Circle* circle, const Point* cords, size_t size)
+int is_collision_figure_with_circle(
+        const Circle circle, const Point* cords, size_t size)
 {
     for (size_t i = 1; i < size; i++) {
         double distance = point_segment_distance(
-                cords[i - 1],
-                cords[i],
-                circle->position);
-        if (distance <= circle->radius) {
+                cords[i - 1], cords[i], circle.position);
+
+        if (distance <= circle.radius) {
             return 1;
         }
     }
     return 0;
 }
 
-int is_collision_figures(
-    const Point* cords1, const size_t size1,
-    const Point* cords2, const size_t size2)
+int is_collision_circles(const Circle circle1, const Circle circle2)
 {
-    for(size_t i = 0; i < size1 - 1; i++) {
+    double distance = two_points_distance(circle1.position, circle2.position);
+    return distance <= (circle1.radius + circle2.radius);
+}
+
+int is_collision_figures(
+        const Point* cords1,
+        const size_t size1,
+        const Point* cords2,
+        const size_t size2)
+{
+    for (size_t i = 0; i < size1 - 1; i++) {
         for (size_t j = 0; j < size2 - 1; j++) {
             Point segment1[2] = {cords1[i], cords1[i + 1]};
             Point segment2[2] = {cords2[j], cords2[j + 1]};
