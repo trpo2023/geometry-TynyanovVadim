@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #pragma once
 
 #define ERROR_ALLOCATE_MEMORY "failed to allocate memory"
