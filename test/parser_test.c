@@ -184,3 +184,40 @@ CTEST(collision_suite, segments_false)
 
     ASSERT_FALSE(is_segment_collision(segment1, segment2));
 }
+
+CTEST(distance_suite, vector)
+{
+    Point vector = {3, 4};
+    double exp_len = 5;
+
+    double real_len = vector_len(vector);
+    ASSERT_EQUAL(exp_len, real_len);
+}
+
+CTEST(distance_suite, two_points)
+{
+    Point p1 = {3, 4};
+    Point p2 = {6, 8};
+    double exp_distance = 5;
+
+    double real_distance = two_points_distance(p1, p2);
+    ASSERT_EQUAL(exp_distance, real_distance);
+}
+
+CTEST(distance_suite, point_and_segment)
+{
+    // segment p1 - p2
+    Point s1 = {3, 4};
+    Point s2 = {0, 0};
+    // point p1
+    Point p1 = {6, 8};
+    Point p2 = {3, 4};
+    double exp_distance1 = 5;
+    double exp_distance2 = 0;
+
+    double real_distance1 = point_segment_distance(s1, s2, p1);
+    double real_distance2 = point_segment_distance(s1, s2, p2);
+
+    ASSERT_EQUAL(exp_distance1, real_distance1);
+    ASSERT_EQUAL(exp_distance2, real_distance2);
+}
