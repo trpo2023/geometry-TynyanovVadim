@@ -219,7 +219,7 @@ int is_segment_collision(const Point* segment_1, const Point* segment_2)
 
 double vector_len(const Point vector)
 {
-    return sqrt(vector.x * vector.x + vector.y + vector.y);
+    return sqrt(vector.x * vector.x + vector.y * vector.y);
 }
 
 double find_cos(const Point vector_1, const Point vector_2)
