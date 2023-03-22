@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "libgeometry/calculation.h"
 #include "libgeometry/lexer.h"
 #include "libgeometry/parser.h"
 
