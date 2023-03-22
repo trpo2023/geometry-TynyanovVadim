@@ -62,4 +62,6 @@ test:  $(TEST_PATH)
 
 $(TEST_PATH): $(TEST_OBJECTS) $(LIB_PATH)
 	$(CC) $(CFLAGS) $(CPPFLAGS) $^ -o $@ $(LDFLAGS) $(LDLIBS)
+
+runtest: $(TEST_PATH)
 	./$(TEST_PATH)
