@@ -9,6 +9,14 @@
 
 #define FILE_ARGUMENT 2
 
+int is_allocate_memory(void *pointer, int size)
+{
+    if (!pointer && size > 0) {
+        return -1;
+    }
+    return 0;
+}
+
 int main(int argc, char** argv)
 {
     if (argc < FILE_ARGUMENT) {
