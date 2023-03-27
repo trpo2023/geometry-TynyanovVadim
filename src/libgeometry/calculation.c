@@ -1,8 +1,8 @@
 #include <math.h>
 
+#include "calculation.h"
 #include "lexer.h"
 #include "parser.h"
-#include "calculation.h"
 
 double circle_surface(const Circle circle)
 {

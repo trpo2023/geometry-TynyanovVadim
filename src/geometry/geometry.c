@@ -9,7 +9,7 @@
 
 #define FILE_ARGUMENT 2
 
-int is_allocate_memory(void *pointer, int size)
+int is_allocate_memory(void* pointer, int size)
 {
     if (!pointer && size > 0) {
         return -1;
