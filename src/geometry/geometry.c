@@ -3,10 +3,19 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "libgeometry/calculation.h"
 #include "libgeometry/lexer.h"
 #include "libgeometry/parser.h"
 
 #define FILE_ARGUMENT 2
+
+int is_allocate_memory(void *pointer, int size)
+{
+    if (!pointer && size > 0) {
+        return -1;
+    }
+    return 0;
+}
 
 int main(int argc, char** argv)
 {
@@ -62,30 +71,196 @@ int main(int argc, char** argv)
         if (!is_syntax_correct(line, read)) {
             return -1;
         }
-        printf("%s", line);
         if (find_figure(line, CIRCLE)) {
             if (get_circle(&(circles[circles_amount]), line)) {
-                printf("\tPerimetr = %f\n",
-                       circle_perimetr(circles[circles_amount]));
-                printf("\tSurface = %f\n",
-                       circle_surface(circles[circles_amount]));
                 circles_amount++;
             }
         } else if (find_figure(line, TRIANGLE)) {
             if (get_triangle(&(triangles[triangles_amount]), line)) {
-                printf("\tPerimetr = %f\n",
-                       triangle_perimetr(triangles[triangles_amount]));
-                printf("\tSurface = %f\n",
-                       triangel_surface(triangles[triangles_amount]));
                 triangles_amount++;
             }
         } else if (find_figure(line, POLYGON)) {
             if (get_polygon(&(polygons[polygons_amount]), line)) {
-                printf("\tPerimetr = %f\n",
-                       polygon_perimetr(polygons[polygons_amount]));
-                printf("\tSurface = %f\n",
-                       polygon_surface(polygons[polygons_amount]));
                 polygons_amount++;
+            }
+        }
+    }
+
+    for (int i = 0; i < circles_amount; i++) {
+        Circle circle = circles[i];
+        printf("circle(%f %f, %f)\n",
+               circle.position.x,
+               circle.position.y,
+               circle.radius);
+
+        printf("\tPerimetr = %f\n", circle_perimetr(circle));
+        printf("\tSurface = %f\n", circle_surface(circle));
+        printf("\tintersects:\n");
+
+        for (int j = 0; j < circles_amount; j++) {
+            if (j == i)
+                continue;
+            if (is_collision_circles(circle, circles[j])) {
+                printf("\t\tcircle(%f %f, %f)\n",
+                       circles[j].position.x,
+                       circles[j].position.y,
+                       circles[j].radius);
+            }
+        }
+        for (int j = 0; j < triangles_amount; j++) {
+            if (is_collision_figure_with_circle(
+                        circle, triangles[j].cords, TRIANGLE_TOKENS_AMOUNT)) {
+                printf("\t\ttriangle((");
+                for (int n = 0; n < TRIANGLE_TOKENS_AMOUNT; n++) {
+                    printf("%f %f",
+                           triangles[j].cords[n].x,
+                           triangles[j].cords[n].y);
+                    if (n < TRIANGLE_TOKENS_AMOUNT - 1) {
+                        printf(", ");
+                    }
+                }
+                printf("))\n");
+            }
+        }
+        for (int j = 0; j < polygons_amount; j++) {
+            if (is_collision_figure_with_circle(
+                        circle, polygons[j].cords, polygons[j].size)) {
+                printf("\t\tpolygon((");
+                for (int n = 0; n < polygons[j].size; n++) {
+                    printf("%f %f",
+                           polygons[j].cords[n].x,
+                           polygons[j].cords[n].y);
+                    if (n < polygons[j].size - 1) {
+                        printf(", ");
+                    }
+                }
+                printf("))\n");
+            }
+        }
+    }
+
+    for (int i = 0; i < polygons_amount; i++) {
+        Polygon polygon = polygons[i];
+        printf("polygon((");
+        for (int n = 0; n < polygon.size; n++) {
+            printf("%f %f", polygon.cords[n].x, polygon.cords[n].y);
+            if (n < polygon.size - 1) {
+                printf(", ");
+            }
+        }
+        printf("))\n");
+        printf("\tPerimetr = %f\n", polygon_perimetr(polygon));
+        printf("\tSurface = %f\n", polygon_surface(polygon));
+        printf("\tintersects:\n");
+
+        for (int j = 0; j < circles_amount; j++) {
+            if (is_collision_figure_with_circle(
+                        circles[j], polygon.cords, polygon.size)) {
+                printf("\t\tcircle(%f %f, %f)\n",
+                       circles[j].position.x,
+                       circles[j].position.y,
+                       circles[j].radius);
+            }
+        }
+        for (int j = 0; j < triangles_amount; j++) {
+            if (is_collision_figures(
+                        triangles[j].cords,
+                        TRIANGLE_TOKENS_AMOUNT,
+                        polygon.cords,
+                        polygon.size)) {
+                printf("\t\ttriangle((");
+                for (int n = 0; n < TRIANGLE_TOKENS_AMOUNT; n++) {
+                    printf("%f %f",
+                           triangles[j].cords[n].x,
+                           triangles[j].cords[n].y);
+                    if (n < TRIANGLE_TOKENS_AMOUNT - 1) {
+                        printf(", ");
+                    }
+                }
+                printf("))\n");
+            }
+        }
+        for (int j = 0; j < polygons_amount; j++) {
+            if (j == i)
+                continue;
+            if (is_collision_figures(
+                        polygons[j].cords,
+                        polygons[j].size,
+                        polygon.cords,
+                        polygon.size)) {
+                printf("\t\tpolygon((");
+                for (int n = 0; n < polygons[j].size; n++) {
+                    printf("%f %f",
+                           polygons[j].cords[n].x,
+                           polygons[j].cords[n].y);
+                    if (n < polygons[j].size - 1) {
+                        printf(", ");
+                    }
+                }
+                printf("))\n");
+            }
+        }
+    }
+
+    for (int i = 0; i < triangles_amount; i++) {
+        Triangle triangle = triangles[i];
+        printf("triangle((");
+        for (int n = 0; n < TRIANGLE_TOKENS_AMOUNT; n++) {
+            printf("%f %f", triangle.cords[n].x, triangle.cords[n].y);
+            if (n < TRIANGLE_TOKENS_AMOUNT - 1) {
+                printf(", ");
+            }
+        }
+        printf("))\n");
+        printf("\tPerimetr = %f\n", triangle_perimetr(triangle));
+        printf("\tSurface = %f\n", triangle_surface(triangle));
+        printf("\tintersects:\n");
+
+        for (int j = 0; j < circles_amount; j++) {
+            if (is_collision_figure_with_circle(
+                        circles[j], triangle.cords, TRIANGLE_TOKENS_AMOUNT)) {
+                printf("\t\tcircle(%f %f, %f)\n",
+                       circles[j].position.x,
+                       circles[j].position.y,
+                       circles[j].radius);
+            }
+        }
+        for (int j = 0; j < triangles_amount; j++) {
+            if (j == i)
+                continue;
+            if (is_collision_figures(
+                        triangles[j].cords,
+                        TRIANGLE_TOKENS_AMOUNT,
+                        triangle.cords,
+                        TRIANGLE_TOKENS_AMOUNT)) {
+                printf("\t\ttriangle((");
+                for (int n = 0; n < TRIANGLE_TOKENS_AMOUNT; n++) {
+                    printf("%f %f",
+                           triangles[j].cords[n].x,
+                           triangles[j].cords[n].y);
+                    if (n < TRIANGLE_TOKENS_AMOUNT - 1) {
+                        printf(", ");
+                    }
+                }
+                printf("))\n");
+            }
+        }
+        for (int j = 0; j < polygons_amount; j++) {
+            if (is_collision_figures(
+                        polygons[j].cords,
+                        polygons[j].size,
+                        triangle.cords,
+                        TRIANGLE_TOKENS_AMOUNT)) {
+                printf("\t\tpolygon((");
+                for (int n = 0; n < polygons[j].size; n++) {
+                    printf("%f %f",
+                           polygons[j].cords[n].x,
+                           polygons[j].cords[n].y);
+                    if (n < polygons[j].size - 1) {
+                        printf(", ");
+                    }
+                }
+                printf("))\n");
             }
         }
     }

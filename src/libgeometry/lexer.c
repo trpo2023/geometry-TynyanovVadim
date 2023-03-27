@@ -147,6 +147,7 @@ int is_argument_correct(char* line)
             }
             continue;
         } else if (*curent_symbol == ',' || *curent_symbol == ')') {
+            dot_count = 0;
             if (argumet_count != 2 && *curent_symbol == ',') {
                 message_error(
                         line,
@@ -208,6 +209,7 @@ int is_argument_correct(char* line)
                 break;
             }
         } else if (*curent_symbol == ' ' || *curent_symbol == '(') {
+            dot_count = 0;
             curent_symbol++;
             continue;
         } else {
