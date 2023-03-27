@@ -1,9 +1,9 @@
 #include <ctest.h>
 #include <math.h>
 
-#include "libgeometry/parser.h"
-#include "libgeometry/lexer.h"
 #include "libgeometry/calculation.h"
+#include "libgeometry/lexer.h"
+#include "libgeometry/parser.h"
 
 CTEST(surface_suite, circle)
 {
@@ -137,7 +137,6 @@ CTEST(collision_suite, figure_with_circle_true)
     Point t3 = {6, 6};
     Point tcords[] = {t1, t2, t3, t1};
 
-
     ASSERT_TRUE(is_collision_figure_with_circle(circle, tcords, 4));
 }
 
@@ -150,7 +149,6 @@ CTEST(collision_suite, figure_with_circle_false)
     Point t2 = {6, 5};
     Point t3 = {6, 6};
     Point tcords[] = {t1, t2, t3, t1};
-
 
     ASSERT_FALSE(is_collision_figure_with_circle(circle, tcords, 4));
 }
