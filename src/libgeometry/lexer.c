@@ -9,7 +9,7 @@
 void message_error(char* string, int column, char* message)
 {
     fprintf(stderr,
-            "%s%*c\nError at column %d: %s\n",
+            "\n%s\n%*c\nError at column %d: %s\n",
             string,
             column,
             '^',
