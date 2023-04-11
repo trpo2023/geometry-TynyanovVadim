@@ -57,7 +57,7 @@ clean:
 run: $(APP_PATH)
 	./$(APP_PATH) $(DATA_PATH);
 
-.PHONY: test
+.PHONY: test runtest
 test:  $(TEST_PATH)
 
 $(TEST_PATH): $(TEST_OBJECTS) $(LIB_PATH)
