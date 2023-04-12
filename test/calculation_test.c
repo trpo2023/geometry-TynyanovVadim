@@ -2,15 +2,13 @@
 #include <math.h>
 
 #include "libgeometry/calculation.h"
-#include "libgeometry/lexer.h"
-#include "libgeometry/parser.h"
 
 CTEST(surface_suite, circle)
 {
     Point p = {0, 0};
     Circle circle = {p, 5};
     double expected_surface = (M_PI * circle.radius * circle.radius);
-    double real_surface = circle_surface(circle);
+    double real_surface = circle_surface(&circle);
     ASSERT_DBL_NEAR(expected_surface, real_surface);
 }
 
@@ -23,7 +21,7 @@ CTEST(surface_suite, polygon)
     Point cords[] = {p1, p2, p3, p4, p1};
     Polygon polygon = {cords, 5};
     double expected_surface = 16;
-    double real_surface = polygon_surface(polygon);
+    double real_surface = polygon_surface(&polygon);
     ASSERT_DBL_NEAR(expected_surface, real_surface);
 }
 
@@ -35,7 +33,7 @@ CTEST(surface_suite, triangle)
     Point cords[] = {p1, p2, p3, p1};
     Triangle triangle = {cords};
     double expected_surface = 6;
-    double real_surface = triangle_surface(triangle);
+    double real_surface = triangle_surface(&triangle);
     ASSERT_DBL_NEAR(expected_surface, real_surface);
 }
 
@@ -44,7 +42,7 @@ CTEST(perimetr_suite, circle)
     Point p = {0, 0};
     Circle circle = {p, 5};
     double expected_perimetr = (2 * M_PI * circle.radius);
-    double real_perimetr = circle_perimetr(circle);
+    double real_perimetr = circle_perimetr(&circle);
     ASSERT_DBL_NEAR(expected_perimetr, real_perimetr);
 }
 
@@ -57,7 +55,7 @@ CTEST(perimetr_suite, polygon)
     Point cords[] = {p1, p2, p3, p4, p1};
     Polygon polygon = {cords, 5};
     double expected_perimetr = 16;
-    double real_perimetr = polygon_perimetr(polygon);
+    double real_perimetr = polygon_perimetr(&polygon);
     ASSERT_DBL_NEAR(expected_perimetr, real_perimetr);
 }
 
@@ -69,7 +67,7 @@ CTEST(perimetr_suite, triangle)
     Point cords[] = {p1, p2, p3, p1};
     Triangle triangle = {cords};
     double expected_perimetr = 12;
-    double real_perimetr = triangle_perimetr(triangle);
+    double real_perimetr = triangle_perimetr(&triangle);
     ASSERT_DBL_NEAR(expected_perimetr, real_perimetr);
 }
 
@@ -113,7 +111,7 @@ CTEST(collision_suite, two_circles_true)
     Circle circle1 = {p1, 3};
     Circle circle2 = {p2, 2};
 
-    ASSERT_TRUE(is_collision_circles(circle1, circle2));
+    ASSERT_TRUE(is_collision_circles(&circle1, &circle2));
 }
 
 CTEST(collision_suite, two_circles_false)
@@ -124,7 +122,7 @@ CTEST(collision_suite, two_circles_false)
     Circle circle1 = {p1, 2};
     Circle circle2 = {p2, 2};
 
-    ASSERT_FALSE(is_collision_circles(circle1, circle2));
+    ASSERT_FALSE(is_collision_circles(&circle1, &circle2));
 }
 
 CTEST(collision_suite, figure_with_circle_true)
@@ -137,7 +135,7 @@ CTEST(collision_suite, figure_with_circle_true)
     Point t3 = {6, 6};
     Point tcords[] = {t1, t2, t3, t1};
 
-    ASSERT_TRUE(is_collision_figure_with_circle(circle, tcords, 4));
+    ASSERT_TRUE(is_collision_figure_with_circle(&circle, tcords, 4));
 }
 
 CTEST(collision_suite, figure_with_circle_false)
@@ -150,7 +148,7 @@ CTEST(collision_suite, figure_with_circle_false)
     Point t3 = {6, 6};
     Point tcords[] = {t1, t2, t3, t1};
 
-    ASSERT_FALSE(is_collision_figure_with_circle(circle, tcords, 4));
+    ASSERT_FALSE(is_collision_figure_with_circle(&circle, tcords, 4));
 }
 
 CTEST(collision_suite, segments_true)
@@ -189,7 +187,7 @@ CTEST(distance_suite, vector)
     Point vector = {3, 4};
     double exp_len = 5;
 
-    double real_len = vector_len(vector);
+    double real_len = vector_len(&vector);
     ASSERT_EQUAL(exp_len, real_len);
 }
 
@@ -199,7 +197,7 @@ CTEST(distance_suite, two_points)
     Point p2 = {6, 8};
     double exp_distance = 5;
 
-    double real_distance = two_points_distance(p1, p2);
+    double real_distance = two_points_distance(&p1, &p2);
     ASSERT_EQUAL(exp_distance, real_distance);
 }
 
@@ -214,8 +212,8 @@ CTEST(distance_suite, point_and_segment)
     double exp_distance1 = 5;
     double exp_distance2 = 0;
 
-    double real_distance1 = point_segment_distance(s1, s2, p1);
-    double real_distance2 = point_segment_distance(s1, s2, p2);
+    double real_distance1 = point_segment_distance(&s1, &s2, &p1);
+    double real_distance2 = point_segment_distance(&s1, &s2, &p2);
 
     ASSERT_EQUAL(exp_distance1, real_distance1);
     ASSERT_EQUAL(exp_distance2, real_distance2);

@@ -1,12 +1,13 @@
 #include <math.h>
+#include <string.h>
 
 #include "calculation.h"
 #include "lexer.h"
 #include "parser.h"
 
-double circle_surface(const Circle circle)
+double circle_surface(const Circle* circle)
 {
-    return M_PI * pow(circle.radius, 2); // M_PI = 3.14
+    return M_PI * pow(circle->radius, 2); // M_PI = 3.14
 }
 
 double gauss_surface(const Point* cords, size_t len)
@@ -22,47 +23,46 @@ double gauss_surface(const Point* cords, size_t len)
     return fabs(surface) / 2.0;
 }
 
-double triangle_surface(const Triangle triangle)
+double triangle_surface(const Triangle* triangle)
 {
-    return gauss_surface(triangle.cords, TRIANGLE_TOKENS_AMOUNT);
+    return gauss_surface(triangle->cords, TRIANGLE_TOKENS_AMOUNT);
 }
 
-double polygon_surface(const Polygon polygon)
+double polygon_surface(const Polygon* polygon)
 {
-    return gauss_surface(polygon.cords, polygon.size - 1);
+    return gauss_surface(polygon->cords, polygon->size - 1);
 }
 
-double circle_perimetr(const Circle circle)
+double circle_perimetr(const Circle* circle)
 {
-    return 2 * M_PI * circle.radius; // M_PI = 3.14
+    return 2 * M_PI * circle->radius; // M_PI = 3.14
 }
 
-double two_points_distance(const Point point1, const Point point2)
+double two_points_distance(const Point* point1, const Point* point2)
 {
-    return sqrt(pow(point1.x - point2.x, 2) + pow(point1.y - point2.y, 2));
+    return sqrt(pow(point1->x - point2->x, 2) + pow(point1->y - point2->y, 2));
 }
 
 double figure_perimetr(const Point* cords, size_t len)
 {
     double perimetr = 0;
     for (size_t i = 0; i < len - 1; i++) {
-        perimetr += two_points_distance(cords[i], cords[i + 1]);
+        perimetr += two_points_distance(&(cords[i]), &(cords[i + 1]));
     }
     return perimetr;
 }
 
-double triangle_perimetr(const Triangle triangle)
+double triangle_perimetr(const Triangle* triangle)
 {
-    return figure_perimetr(triangle.cords, TRIANGLE_TOKENS_AMOUNT);
+    return figure_perimetr(triangle->cords, TRIANGLE_TOKENS_AMOUNT);
 }
 
-double polygon_perimetr(const Polygon polygon)
+double polygon_perimetr(const Polygon* polygon)
 {
-    return figure_perimetr(polygon.cords, polygon.size);
+    return figure_perimetr(polygon->cords, polygon->size);
 }
 
 int is_segment_collision(const Point* segment_1, const Point* segment_2)
-
 {
     double v1, v2, v3, v4;
     Point vector_12 = {
@@ -92,18 +92,18 @@ int is_segment_collision(const Point* segment_1, const Point* segment_2)
     return ((v1 * v2 < 0) && (v3 * v4 < 0));
 }
 
-double vector_len(const Point vector)
+double vector_len(const Point* vector)
 {
-    return sqrt(vector.x * vector.x + vector.y * vector.y);
+    return sqrt(vector->x * vector->x + vector->y * vector->y);
 }
 
-double find_cos(const Point vector_1, const Point vector_2)
+double find_cos(const Point* vector_1, const Point* vector_2)
 {
-    return (vector_1.x * vector_2.x + vector_1.y * vector_2.y)
+    return (vector_1->x * vector_2->x + vector_1->y * vector_2->y)
             / (vector_len(vector_1) + vector_len(vector_2));
 }
 
-double find_height_of_triangle(const Point a, const Point b, const Point c)
+double find_height_of_triangle(const Point* a, const Point* b, const Point* c)
 {
     // a, b - segment`s cords, c - point`s cords
     double ab = two_points_distance(a, b);
@@ -115,16 +115,16 @@ double find_height_of_triangle(const Point a, const Point b, const Point c)
     return height;
 }
 
-double point_segment_distance(const Point a, const Point b, const Point c)
+double point_segment_distance(const Point* a, const Point* b, const Point* c)
 {
     // a, b - segment`s cords, c - point`s cords
-    Point vector_ba = {a.x - b.x, a.y - b.y};
-    Point vector_ab = {b.x - a.x, b.y - a.y};
-    Point vector_bc = {c.x - b.x, c.y - b.y};
-    Point vector_ac = {c.x - a.x, c.y - a.y};
+    Point vector_ba = {a->x - b->x, a->y - b->y};
+    Point vector_ab = {b->x - a->x, b->y - a->y};
+    Point vector_bc = {c->x - b->x, c->y - b->y};
+    Point vector_ac = {c->x - a->x, c->y - a->y};
 
-    double abc_cos = find_cos(vector_ba, vector_bc);
-    double bac_cos = find_cos(vector_ab, vector_ac);
+    double abc_cos = find_cos(&vector_ba, &vector_bc);
+    double bac_cos = find_cos(&vector_ab, &vector_ac);
 
     if (bac_cos <= 0) {
         return two_points_distance(a, c);
@@ -136,23 +136,24 @@ double point_segment_distance(const Point a, const Point b, const Point c)
 }
 
 int is_collision_figure_with_circle(
-        const Circle circle, const Point* cords, size_t size)
+        const Circle* circle, const Point* cords, size_t size)
 {
     for (size_t i = 1; i < size; i++) {
         double distance = point_segment_distance(
-                cords[i - 1], cords[i], circle.position);
+                &cords[i - 1], &cords[i], &(circle->position));
 
-        if (distance <= circle.radius) {
+        if (distance <= circle->radius) {
             return 1;
         }
     }
     return 0;
 }
 
-int is_collision_circles(const Circle circle1, const Circle circle2)
+int is_collision_circles(const Circle* circle1, const Circle* circle2)
 {
-    double distance = two_points_distance(circle1.position, circle2.position);
-    return distance <= (circle1.radius + circle2.radius);
+    double distance
+            = two_points_distance(&(circle1->position), &(circle2->position));
+    return distance <= (circle1->radius + circle2->radius);
 }
 
 int is_collision_figures(
@@ -172,3 +173,95 @@ int is_collision_figures(
     }
     return 0;
 }
+
+void print_figure(const void* figure, const char* type)
+{
+    printf("%s(", type);
+
+    if (strcmp(type, CIRCLE) == 0) {
+        printf("%lf %lf, %lf",
+               ((Circle*)figure)->position.x,
+               ((Circle*)figure)->position.y,
+               ((Circle*)figure)->radius);
+
+    } else if (strcmp(type, TRIANGLE) == 0) {
+        printf("(");
+        for (int n = 0; n < TRIANGLE_TOKENS_AMOUNT; n++) {
+            printf("%f %f",
+                   ((Triangle*)figure)->cords[n].x,
+                   ((Triangle*)figure)->cords[n].y);
+            if (n < TRIANGLE_TOKENS_AMOUNT - 1) {
+                printf(", ");
+            }
+        }
+        printf(")");
+
+    } else if (strcmp(type, POLYGON) == 0) {
+        printf("(");
+        for (int n = 0; n < ((Polygon*)figure)->size; n++) {
+            printf("%f %f",
+                   ((Polygon*)figure)->cords[n].x,
+                   ((Polygon*)figure)->cords[n].y);
+            if (n < ((Polygon*)figure)->size - 1) {
+                printf(", ");
+            }
+        }
+        printf(")");
+    }
+    printf(")\n");
+}
+
+void print_figure_parametrs(const void* figure, const char* type)
+{
+    double perimetr;
+    double surface;
+    if (strcmp(type, CIRCLE) == 0) {
+        perimetr = circle_perimetr(figure);
+        surface = circle_surface(figure);
+    } else if (strcmp(type, TRIANGLE) == 0) {
+        perimetr = triangle_perimetr(figure);
+        surface = triangle_surface(figure);
+    } else if (strcmp(type, POLYGON) == 0) {
+        perimetr = polygon_perimetr(figure);
+        surface = polygon_surface(figure);
+    }
+
+    printf("\tPerimetr = %lf\n", perimetr);
+    printf("\tSurface = %lf\n", surface);
+}
+
+// void calculate_and_print_collision(
+//         const void* all_figures, const void* sizes, const char* type)
+// {
+//     if (srtcmp(type, CIRCLE) == 0) {
+//         for (int i = 0; i < sizes[0]; i++) { //size[0] - circles_amount
+//             Circle circle = circles[i];
+//             print_figure(&circle, CIRCLE);
+//             print_figure_parametrs(&circle, CIRCLE);
+//             printf("\tintersects:\n");
+
+//             for (int j = 0; j < sizes[0]; j++) {
+//                 if (j == i)
+//                     continue;
+//                 if (is_collision_circles(circle, circles[j])) {
+//                     print_figure(&(circles[j]), CIRCLE);
+//                 }
+//                 for (int j = 0; j < sizes[1]; j++) {
+//                     if (is_collision_figure_with_circle(
+//                                 circle,
+//                                 triangles[j].cords,
+//                                 TRIANGLE_TOKENS_AMOUNT)) {
+//                         print_figure(&(triangles[j]), TRIANGLE);
+//                     }
+//                 }
+//                 for (int j = 0; j < sizes[2]; j++) {
+//                     if (is_collision_figure_with_circle(
+//                                 circle, polygons[j].cords, polygons[j].size))
+//                                 {
+//                         print_figure(&(polygons[j]), POLYGON);
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
