@@ -43,18 +43,13 @@ int main(int argc, char** argv)
     Triangle* triangles = malloc(sizeof(Triangle) * triangles_size);
     Polygon* polygons = malloc(sizeof(Polygon) * polygons_size);
 
-    if (!circles && circles_size > 0) {
+    if (is_allocate_memory(circles, circles_amount) ||
+        is_allocate_memory(triangles, triangles_amount) ||
+        is_allocate_memory(polygons, polygons_amount)) {
         fprintf(stderr, "%s\n", ERROR_ALLOCATE_MEMORY);
         return -1;
     }
-    if (!triangles && triangles_size > 0) {
-        fprintf(stderr, "%s\n", ERROR_ALLOCATE_MEMORY);
-        return -1;
-    }
-    if (!polygons && polygons_size > 0) {
-        fprintf(stderr, "%s\n", ERROR_ALLOCATE_MEMORY);
-        return -1;
-    }
+
 
     if (file == NULL) {
         fprintf(stderr, "%s\n", ERROR_FILE_NOT_FOUND);
