@@ -199,7 +199,9 @@ void print_figure(const void* figure, const char* type)
     } else if (strcmp(type, POLYGON) == 0) {
         printf("(");
         for (int n = 0; n < ((Polygon*)figure)->size; n++) {
-            printf("%f %f", ((Polygon*)figure)->cords[n].x, ((Polygon*)figure)->cords[n].y);
+            printf("%f %f",
+                   ((Polygon*)figure)->cords[n].x,
+                   ((Polygon*)figure)->cords[n].y);
             if (n < ((Polygon*)figure)->size - 1) {
                 printf(", ");
             }
