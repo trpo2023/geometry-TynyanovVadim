@@ -83,7 +83,7 @@ int main(int argc, char** argv)
             } else {
                 return -1;
             }
-        } 
+        }
     }
 
     for (int i = 0; i < circles_amount; i++) {

@@ -229,39 +229,3 @@ void print_figure_parametrs(const void* figure, const char* type)
     printf("\tPerimetr = %lf\n", perimetr);
     printf("\tSurface = %lf\n", surface);
 }
-
-// void calculate_and_print_collision(
-//         const void* all_figures, const void* sizes, const char* type)
-// {
-//     if (srtcmp(type, CIRCLE) == 0) {
-//         for (int i = 0; i < sizes[0]; i++) { //size[0] - circles_amount
-//             Circle circle = circles[i];
-//             print_figure(&circle, CIRCLE);
-//             print_figure_parametrs(&circle, CIRCLE);
-//             printf("\tintersects:\n");
-
-//             for (int j = 0; j < sizes[0]; j++) {
-//                 if (j == i)
-//                     continue;
-//                 if (is_collision_circles(circle, circles[j])) {
-//                     print_figure(&(circles[j]), CIRCLE);
-//                 }
-//                 for (int j = 0; j < sizes[1]; j++) {
-//                     if (is_collision_figure_with_circle(
-//                                 circle,
-//                                 triangles[j].cords,
-//                                 TRIANGLE_TOKENS_AMOUNT)) {
-//                         print_figure(&(triangles[j]), TRIANGLE);
-//                     }
-//                 }
-//                 for (int j = 0; j < sizes[2]; j++) {
-//                     if (is_collision_figure_with_circle(
-//                                 circle, polygons[j].cords, polygons[j].size))
-//                                 {
-//                         print_figure(&(polygons[j]), POLYGON);
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// }

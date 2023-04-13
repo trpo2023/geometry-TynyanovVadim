@@ -16,7 +16,6 @@
 
 #define ERROR_OPEN_BRACKER_NOT_FOUND "expected '('"
 #define ERROR_CLOSE_BRACKER_NOT_FOUND "expected ')'"
-
 #define ERROR_WRONG_ARGUMENT "expected '<double>'"
 #define ERROR_UNEXPECTED_TOKEN "unexpected token"
 #define ERROR_INVALID_ARGUMENTS_TYPE "invalid arguments"

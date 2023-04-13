@@ -200,7 +200,7 @@ int is_syntax_correct(char* line, int len)
     }
 
     int column;
-    char *error = NULL;
+    char* error = NULL;
 
     column = check_brackets(line, len, &error);
     if (error) {
