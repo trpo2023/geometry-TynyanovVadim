@@ -12,8 +12,11 @@
 #define CIRCLE_BRACKETS 1
 
 #define ERROR_FIGURE_NOT_FOUND "expected 'circle', 'triangle' or 'polygon'"
+#define ERROR_BRACKETS "error bracket"
+
 #define ERROR_OPEN_BRACKER_NOT_FOUND "expected '('"
 #define ERROR_CLOSE_BRACKER_NOT_FOUND "expected ')'"
+
 #define ERROR_WRONG_ARGUMENT "expected '<double>'"
 #define ERROR_UNEXPECTED_TOKEN "unexpected token"
 #define ERROR_INVALID_ARGUMENTS_TYPE "invalid arguments"
@@ -25,7 +28,7 @@
 
 void message_error(char* string, int column, char* message);
 int find_figure(char* line, char* figure);
-int check_brackets(char* line, int len);
-int check_unexpected_token(char* line, int len);
-int is_argument_correct(char* line);
+int check_brackets(char* line, int len, char** error);
+int check_unexpected_token(char* line, int len, char** error);
+int is_argument_correct(char* line, char** error);
 int is_syntax_correct(char* line, int len);
