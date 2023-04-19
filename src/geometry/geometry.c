@@ -68,14 +68,20 @@ int main(int argc, char** argv)
         if (find_figure(line, CIRCLE)) {
             if (get_circle(&(circles[circles_amount]), line)) {
                 circles_amount++;
+            } else {
+                return -1;
             }
         } else if (find_figure(line, TRIANGLE)) {
             if (get_triangle(&(triangles[triangles_amount]), line)) {
                 triangles_amount++;
+            } else {
+                return -1;
             }
         } else if (find_figure(line, POLYGON)) {
             if (get_polygon(&(polygons[polygons_amount]), line)) {
                 polygons_amount++;
+            } else {
+                return -1;
             }
         }
     }
